@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.6 }}
               >
-                <Logo className="h-8 w-8" />
+                <Logo className="h-8 w-8 text-emerald-600" />
               </motion.div>
               <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 eJAMB
