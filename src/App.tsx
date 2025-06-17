@@ -20,6 +20,7 @@ import { PaymentPage } from './pages/PaymentPage';
 import { CoursesPage } from './pages/CoursesPage';
 import { CreateCoursePage } from './pages/CreateCoursePage';
 import { SubjectsPage } from './pages/SubjectsPage';
+import { SyllabusPage } from './pages/SyllabusPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/subjects" element={<SubjectsPage />} />
+            <Route path="/syllabus" element={<SyllabusPage />} />
             
             <Route path="/student" element={
               <ProtectedRoute role="student">
