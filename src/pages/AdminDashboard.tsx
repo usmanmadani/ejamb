@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
+import { availableSubjects, mockCourses, mockTeachers, Course } from '../data/courses';
 import { 
   Users, 
   DollarSign, 
@@ -16,11 +17,28 @@ import {
   Upload,
   Settings,
   Bell,
-  BarChart3
+  BarChart3,
+  Plus,
+  Edit,
+  Trash2,
+  UserPlus,
+  Search,
+  Filter
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [courses, setCourses] = useState(mockCourses);
+  const [teachers, setTeachers] = useState(mockTeachers);
+  const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
+  const [showAssignTeacherModal, setShowAssignTeacherModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [newCourse, setNewCourse] = useState({
+    title: '',
+    subject: '',
+    description: ''
+  });
 
   const stats = {
     totalStudents: 1247,
@@ -28,7 +46,11 @@ export const AdminDashboard: React.FC = () => {
     totalRevenue: 6235000,
     pendingWithdrawals: 15,
     activeUsers: 892,
-    newSignups: 23
+    newSignups: 23,
+    totalCourses: courses.length,
+    activeCourses: courses.filter(c => c.isActive).length,
+    totalTeachers: teachers.length,
+    assignedTeachers: teachers.filter(t => t.assignedCourses.length > 0).length
   };
 
   const recentUsers = [
@@ -44,16 +66,88 @@ export const AdminDashboard: React.FC = () => {
     { agent: 'David Wilson', amount: 9500, referrals: 19, date: '2 days ago', status: 'approved' }
   ];
 
+  const handleCreateCourse = () => {
+    if (!newCourse.title || !newCourse.subject || !newCourse.description) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    const course: Course = {
+      id: Date.now().toString(),
+      title: newCourse.title,
+      subject: newCourse.subject,
+      description: newCourse.description,
+      isActive: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      enrolledStudents: 0,
+      materials: [],
+      quizzes: []
+    };
+
+    setCourses([...courses, course]);
+    setNewCourse({ title: '', subject: '', description: '' });
+    setShowCreateCourseModal(false);
+    toast.success('Course created successfully!');
+  };
+
+  const handleAssignTeacher = (courseId: string, teacherId: string) => {
+    const teacher = teachers.find(t => t.id === teacherId);
+    if (!teacher) return;
+
+    // Update course with assigned teacher
+    setCourses(courses.map(course => 
+      course.id === courseId 
+        ? { 
+            ...course, 
+            assignedTeacher: {
+              id: teacher.id,
+              name: teacher.name,
+              email: teacher.email,
+              qualification: teacher.qualification
+            },
+            isActive: true,
+            updatedAt: new Date()
+          }
+        : course
+    ));
+
+    // Update teacher's assigned courses
+    setTeachers(teachers.map(t => 
+      t.id === teacherId 
+        ? { ...t, assignedCourses: [...t.assignedCourses, courseId] }
+        : t
+    ));
+
+    setShowAssignTeacherModal(false);
+    setSelectedCourse(null);
+    toast.success('Teacher assigned successfully!');
+  };
+
+  const handleToggleCourseStatus = (courseId: string) => {
+    setCourses(courses.map(course => 
+      course.id === courseId 
+        ? { ...course, isActive: !course.isActive, updatedAt: new Date() }
+        : course
+    ));
+    toast.success('Course status updated!');
+  };
+
+  const handleDeleteCourse = (courseId: string) => {
+    setCourses(courses.filter(course => course.id !== courseId));
+    toast.success('Course deleted successfully!');
+  };
+
   const handleWithdrawalAction = (index: number, action: 'approve' | 'deny') => {
-    // Handle withdrawal approval/denial logic here
     console.log(`${action} withdrawal for index ${index}`);
   };
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'courses', label: 'Course Management', icon: BookOpen },
+    { id: 'teachers', label: 'Teacher Management', icon: UserCheck },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'withdrawals', label: 'Withdrawals', icon: CreditCard },
-    { id: 'content', label: 'Content', icon: BookOpen },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
@@ -73,19 +167,21 @@ export const AdminDashboard: React.FC = () => {
             Admin Dashboard 🛠️
           </h1>
           <p className="text-gray-600">
-            Manage users, content, and platform operations
+            Manage courses, teachers, users, and platform operations
           </p>
         </motion.div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
+        {/* Enhanced Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-6 mb-8">
           {[
             { title: 'Total Students', value: stats.totalStudents.toLocaleString(), icon: Users, color: 'emerald', change: '+12%' },
             { title: 'Total Agents', value: stats.totalAgents, icon: UserCheck, color: 'blue', change: '+8%' },
             { title: 'Revenue', value: `₦${(stats.totalRevenue / 1000000).toFixed(1)}M`, icon: DollarSign, color: 'green', change: '+15%' },
             { title: 'Pending Withdrawals', value: stats.pendingWithdrawals, icon: AlertCircle, color: 'orange', change: '+3' },
-            { title: 'Active Users', value: stats.activeUsers, icon: TrendingUp, color: 'purple', change: '+5%' },
-            { title: 'New Signups', value: stats.newSignups, icon: Bell, color: 'pink', change: 'Today' }
+            { title: 'Total Courses', value: stats.totalCourses, icon: BookOpen, color: 'purple', change: '+2' },
+            { title: 'Active Courses', value: stats.activeCourses, icon: CheckCircle, color: 'emerald', change: '+1' },
+            { title: 'Total Teachers', value: stats.totalTeachers, icon: UserPlus, color: 'blue', change: '+1' },
+            { title: 'Assigned Teachers', value: stats.assignedTeachers, icon: UserCheck, color: 'green', change: '+1' }
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -128,7 +224,155 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="p-6">
-            {/* Overview Tab */}
+            {/* Course Management Tab */}
+            {activeTab === 'courses' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Course Management</h3>
+                  <button
+                    onClick={() => setShowCreateCourseModal(true)}
+                    className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center space-x-2"
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span>Create Course</span>
+                  </button>
+                </div>
+
+                <div className="grid gap-6">
+                  {courses.map((course) => (
+                    <div key={course.id} className="bg-gray-50 rounded-lg p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-900">{course.title}</h4>
+                          <p className="text-sm text-gray-600">{course.subject}</p>
+                          <p className="text-sm text-gray-500 mt-1">{course.description}</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            course.isActive 
+                              ? 'bg-emerald-100 text-emerald-800' 
+                              : 'bg-orange-100 text-orange-800'
+                          }`}>
+                            {course.isActive ? 'Active' : 'Inactive'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-gray-900">{course.enrolledStudents}</p>
+                          <p className="text-sm text-gray-600">Students</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-gray-900">{course.materials.length}</p>
+                          <p className="text-sm text-gray-600">Materials</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-gray-900">{course.quizzes.length}</p>
+                          <p className="text-sm text-gray-600">Quizzes</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm text-gray-900">
+                            {course.assignedTeacher ? course.assignedTeacher.name : 'Unassigned'}
+                          </p>
+                          <p className="text-sm text-gray-600">Teacher</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-3">
+                        <button 
+                          onClick={() => {
+                            setSelectedCourse(course);
+                            setShowAssignTeacherModal(true);
+                          }}
+                          className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 text-sm"
+                        >
+                          <UserPlus className="h-4 w-4" />
+                          <span>{course.assignedTeacher ? 'Reassign' : 'Assign'} Teacher</span>
+                        </button>
+                        <button 
+                          onClick={() => handleToggleCourseStatus(course.id)}
+                          className="flex items-center space-x-1 text-emerald-600 hover:text-emerald-700 text-sm"
+                        >
+                          <CheckCircle className="h-4 w-4" />
+                          <span>{course.isActive ? 'Deactivate' : 'Activate'}</span>
+                        </button>
+                        <button className="flex items-center space-x-1 text-gray-600 hover:text-gray-700 text-sm">
+                          <Eye className="h-4 w-4" />
+                          <span>View</span>
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteCourse(course.id)}
+                          className="flex items-center space-x-1 text-red-600 hover:text-red-700 text-sm"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Teacher Management Tab */}
+            {activeTab === 'teachers' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Teacher Management</h3>
+                  <div className="flex items-center space-x-3">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Search teachers..."
+                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-4">
+                  {teachers.map((teacher) => (
+                    <div key={teacher.id} className="bg-gray-50 rounded-lg p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <UserCheck className="h-6 w-6 text-blue-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{teacher.name}</h4>
+                            <p className="text-sm text-gray-600">{teacher.email}</p>
+                            <p className="text-sm text-blue-600">{teacher.qualification}</p>
+                            <p className="text-sm text-gray-500">Expertise: {teacher.expertise}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              teacher.isVerified 
+                                ? 'bg-emerald-100 text-emerald-800' 
+                                : 'bg-orange-100 text-orange-800'
+                            }`}>
+                              {teacher.isVerified ? 'Verified' : 'Pending'}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            {teacher.assignedCourses.length} course(s) assigned
+                          </p>
+                          <div className="flex items-center space-x-2 mt-2">
+                            <button className="text-blue-600 hover:text-blue-700 text-sm">View Courses</button>
+                            <button className="text-emerald-600 hover:text-emerald-700 text-sm">Assign Course</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Other existing tabs remain the same */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 <div className="grid lg:grid-cols-2 gap-6">
@@ -167,13 +411,14 @@ export const AdminDashboard: React.FC = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {[
-                        { title: 'Upload Content', icon: Upload, color: 'emerald' },
+                        { title: 'Create Course', icon: Plus, color: 'emerald', action: () => setShowCreateCourseModal(true) },
                         { title: 'View Reports', icon: Eye, color: 'blue' },
                         { title: 'Export Data', icon: Download, color: 'purple' },
                         { title: 'Send Notification', icon: Bell, color: 'orange' }
                       ].map((action, index) => (
                         <button
                           key={index}
+                          onClick={action.action}
                           className={`p-4 bg-${action.color}-50 hover:bg-${action.color}-100 rounded-lg transition-colors text-center`}
                         >
                           <action.icon className={`h-6 w-6 text-${action.color}-600 mx-auto mb-2`} />
@@ -311,53 +556,6 @@ export const AdminDashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Content Tab */}
-            {activeTab === 'content' && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Content Management</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-4">Upload New Content</h4>
-                    <div className="space-y-4">
-                      <button className="w-full bg-emerald-600 text-white p-3 rounded-lg hover:bg-emerald-700 transition-colors">
-                        <Upload className="h-5 w-5 inline mr-2" />
-                        Upload Video Tutorial
-                      </button>
-                      <button className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors">
-                        <Upload className="h-5 w-5 inline mr-2" />
-                        Upload PDF Materials
-                      </button>
-                      <button className="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition-colors">
-                        <Upload className="h-5 w-5 inline mr-2" />
-                        Add Quiz Questions
-                      </button>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-4">Content Statistics</h4>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Total Videos</span>
-                        <span className="font-semibold">247</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">PDF Materials</span>
-                        <span className="font-semibold">89</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Quiz Questions</span>
-                        <span className="font-semibold">1,247</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Past Questions</span>
-                        <span className="font-semibold">10,000+</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Settings Tab */}
             {activeTab === 'settings' && (
               <div>
@@ -425,6 +623,116 @@ export const AdminDashboard: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Create Course Modal */}
+        {showCreateCourseModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Course</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
+                  <input
+                    type="text"
+                    value={newCourse.title}
+                    onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="e.g., Advanced Mathematics for JAMB"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                  <select
+                    value={newCourse.subject}
+                    onChange={(e) => setNewCourse({ ...newCourse, subject: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="">Select Subject</option>
+                    {availableSubjects.map((subject) => (
+                      <option key={subject} value={subject}>{subject}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                  <textarea
+                    value={newCourse.description}
+                    onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Describe the course content and objectives..."
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  onClick={() => setShowCreateCourseModal(false)}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateCourse}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  Create Course
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Assign Teacher Modal */}
+        {showAssignTeacherModal && selectedCourse && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Assign Teacher to {selectedCourse.title}
+              </h3>
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {teachers.filter(t => t.isVerified).map((teacher) => (
+                  <div
+                    key={teacher.id}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleAssignTeacher(selectedCourse.id, teacher.id)}
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900">{teacher.name}</p>
+                      <p className="text-sm text-gray-600">{teacher.qualification}</p>
+                      <p className="text-sm text-blue-600">Expertise: {teacher.expertise}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">
+                        {teacher.assignedCourses.length} courses
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  onClick={() => {
+                    setShowAssignTeacherModal(false);
+                    setSelectedCourse(null);
+                  }}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { mockCourses } from '../data/courses';
 import { 
   BookOpen, 
   Users, 
@@ -13,7 +14,8 @@ import {
   Award,
   TrendingUp,
   Sparkles,
-  Zap
+  Zap,
+  CheckCircle
 } from 'lucide-react';
 
 // Animation variants
@@ -46,147 +48,20 @@ const scaleIn = {
   }
 };
 
-interface Course {
-  id: number;
-  title: string;
-  description: string;
-  instructor: string;
-  instructorAvatar: string;
-  subject: string;
-  price: number;
-  originalPrice?: number;
-  rating: number;
-  students: number;
-  duration: string;
-  level: string;
-  thumbnail: string;
-  isEnrolled?: boolean;
-  isFree?: boolean;
-}
-
 export const CoursesPage: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState('all');
-  const [selectedLevel, setSelectedLevel] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const subjects = [
-    'All Subjects',
-    'Mathematics',
-    'Physics',
-    'Chemistry',
-    'English Language',
-    'Biology',
-    'Literature',
-    'Government',
-    'Economics'
-  ];
+  // Get unique subjects from courses
+  const subjects = ['All Subjects', ...Array.from(new Set(mockCourses.map(course => course.subject)))];
 
-  const levels = ['All Levels', 'Beginner', 'Intermediate', 'Advanced'];
-
-  const courses: Course[] = [
-    {
-      id: 1,
-      title: 'Advanced Physics for JAMB',
-      description: 'Master complex physics concepts with practical examples and real-world applications.',
-      instructor: 'Dr. Sarah Johnson',
-      instructorAvatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'Physics',
-      price: 8000,
-      originalPrice: 12000,
-      rating: 4.9,
-      students: 245,
-      duration: '6 weeks',
-      level: 'Advanced',
-      thumbnail: 'https://images.pexels.com/photos/8471888/pexels-photo-8471888.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: false
-    },
-    {
-      id: 2,
-      title: 'Mathematics Fundamentals',
-      description: 'Build a strong foundation in mathematics with step-by-step explanations.',
-      instructor: 'Prof. Michael Chen',
-      instructorAvatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'Mathematics',
-      price: 0,
-      rating: 4.8,
-      students: 189,
-      duration: '4 weeks',
-      level: 'Beginner',
-      thumbnail: 'https://images.pexels.com/photos/6256065/pexels-photo-6256065.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: true,
-      isFree: true
-    },
-    {
-      id: 3,
-      title: 'Organic Chemistry Mastery',
-      description: 'Understand organic chemistry reactions and mechanisms for JAMB success.',
-      instructor: 'Dr. Adaora Okafor',
-      instructorAvatar: 'https://images.pexels.com/photos/1462630/pexels-photo-1462630.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'Chemistry',
-      price: 6500,
-      rating: 4.7,
-      students: 156,
-      duration: '5 weeks',
-      level: 'Intermediate',
-      thumbnail: 'https://images.pexels.com/photos/2280549/pexels-photo-2280549.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: false
-    },
-    {
-      id: 4,
-      title: 'English Language Excellence',
-      description: 'Improve your English language skills with comprehensive grammar and vocabulary.',
-      instructor: 'Mrs. Funmi Adebayo',
-      instructorAvatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'English Language',
-      price: 5000,
-      rating: 4.6,
-      students: 298,
-      duration: '8 weeks',
-      level: 'Intermediate',
-      thumbnail: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: false
-    },
-    {
-      id: 5,
-      title: 'Biology Concepts Simplified',
-      description: 'Learn biology concepts with visual aids and interactive content.',
-      instructor: 'Dr. Chidi Nwankwo',
-      instructorAvatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'Biology',
-      price: 7000,
-      originalPrice: 9000,
-      rating: 4.8,
-      students: 167,
-      duration: '6 weeks',
-      level: 'Beginner',
-      thumbnail: 'https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: false
-    },
-    {
-      id: 6,
-      title: 'Government and Civics',
-      description: 'Understand Nigerian government structure and civic responsibilities.',
-      instructor: 'Prof. Kemi Adebisi',
-      instructorAvatar: 'https://images.pexels.com/photos/1462630/pexels-photo-1462630.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop',
-      subject: 'Government',
-      price: 4500,
-      rating: 4.5,
-      students: 134,
-      duration: '4 weeks',
-      level: 'Intermediate',
-      thumbnail: 'https://images.pexels.com/photos/8112198/pexels-photo-8112198.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop',
-      isEnrolled: false
-    }
-  ];
-
-  const filteredCourses = courses.filter(course => {
+  const filteredCourses = mockCourses.filter(course => {
     const matchesSubject = selectedSubject === 'all' || course.subject === selectedSubject;
-    const matchesLevel = selectedLevel === 'all' || course.level.toLowerCase() === selectedLevel.toLowerCase();
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         course.instructor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         course.subject.toLowerCase().includes(searchQuery.toLowerCase());
+                         course.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (course.assignedTeacher?.name.toLowerCase().includes(searchQuery.toLowerCase()) || false);
     
-    return matchesSubject && matchesLevel && matchesSearch;
+    return matchesSubject && matchesSearch && course.isActive;
   });
 
   const getSubjectColor = (subject: string) => {
@@ -196,7 +71,7 @@ export const CoursesPage: React.FC = () => {
       'Chemistry': 'green',
       'English Language': 'orange',
       'Biology': 'emerald',
-      'Literature': 'pink',
+      'Literature in English': 'pink',
       'Government': 'indigo',
       'Economics': 'yellow'
     };
@@ -267,10 +142,10 @@ export const CoursesPage: React.FC = () => {
           animate="visible"
         >
           {[
-            { title: 'Total Courses', value: courses.length, icon: BookOpen, color: 'blue', bgGradient: 'from-blue-400 to-blue-600' },
-            { title: 'Expert Teachers', value: '12+', icon: Users, color: 'emerald', bgGradient: 'from-emerald-400 to-emerald-600' },
-            { title: 'Students Enrolled', value: '1,200+', icon: TrendingUp, color: 'purple', bgGradient: 'from-purple-400 to-purple-600' },
-            { title: 'Avg Rating', value: '4.7', icon: Star, color: 'yellow', bgGradient: 'from-yellow-400 to-yellow-600' }
+            { title: 'Available Courses', value: filteredCourses.length, icon: BookOpen, color: 'blue', bgGradient: 'from-blue-400 to-blue-600' },
+            { title: 'Expert Teachers', value: new Set(mockCourses.filter(c => c.assignedTeacher).map(c => c.assignedTeacher?.id)).size, icon: Users, color: 'emerald', bgGradient: 'from-emerald-400 to-emerald-600' },
+            { title: 'Students Enrolled', value: mockCourses.reduce((sum, course) => sum + course.enrolledStudents, 0).toLocaleString(), icon: TrendingUp, color: 'purple', bgGradient: 'from-purple-400 to-purple-600' },
+            { title: 'Avg Rating', value: '4.8', icon: Star, color: 'yellow', bgGradient: 'from-yellow-400 to-yellow-600' }
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -335,18 +210,6 @@ export const CoursesPage: React.FC = () => {
                   ))}
                 </select>
               </div>
-              
-              <select
-                value={selectedLevel}
-                onChange={(e) => setSelectedLevel(e.target.value)}
-                className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 backdrop-blur-sm"
-              >
-                {levels.map(level => (
-                  <option key={level} value={level === 'All Levels' ? 'all' : level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
         </motion.div>
@@ -365,12 +228,8 @@ export const CoursesPage: React.FC = () => {
               className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-white/20 group"
               whileHover={{ scale: 1.02, y: -5 }}
             >
-              <div className="relative overflow-hidden">
-                <img
-                  src={course.thumbnail}
-                  alt={course.title}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="relative overflow-hidden h-48 bg-gradient-to-br from-gray-100 to-gray-200">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-emerald-500/20" />
                 <div className="absolute top-4 left-4">
                   <motion.span 
                     className={`px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-${getSubjectColor(course.subject)}-400 to-${getSubjectColor(course.subject)}-600 text-white shadow-lg`}
@@ -379,47 +238,45 @@ export const CoursesPage: React.FC = () => {
                     {course.subject}
                   </motion.span>
                 </div>
-                {course.isFree && (
-                  <div className="absolute top-4 right-4">
-                    <motion.span 
-                      className="bg-gradient-to-r from-emerald-400 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      FREE
-                    </motion.span>
-                  </div>
-                )}
-                {course.isEnrolled && (
-                  <motion.div 
-                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                <div className="absolute top-4 right-4">
+                  <motion.span 
+                    className="bg-gradient-to-r from-emerald-400 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg"
+                    whileHover={{ scale: 1.05 }}
                   >
-                    <motion.div 
-                      className="bg-white rounded-full p-4 shadow-lg"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <Play className="h-8 w-8 text-blue-600" />
-                    </motion.div>
+                    Active
+                  </motion.span>
+                </div>
+                <motion.div 
+                  className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div 
+                    className="bg-white rounded-full p-4 shadow-lg"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <Play className="h-8 w-8 text-blue-600" />
                   </motion.div>
-                )}
+                </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               
               <div className="p-6">
-                <motion.div 
-                  className="flex items-center space-x-2 mb-3"
-                  whileHover={{ x: 3 }}
-                >
-                  <motion.img
-                    src={course.instructorAvatar}
-                    alt={course.instructor}
-                    className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                    whileHover={{ scale: 1.1 }}
-                  />
-                  <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">{course.instructor}</span>
-                </motion.div>
+                {course.assignedTeacher && (
+                  <motion.div 
+                    className="flex items-center space-x-2 mb-3"
+                    whileHover={{ x: 3 }}
+                  >
+                    <motion.div
+                      className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <Users className="h-4 w-4 text-blue-600" />
+                    </motion.div>
+                    <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">{course.assignedTeacher.name}</span>
+                  </motion.div>
+                )}
                 
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                   {course.title}
@@ -435,38 +292,30 @@ export const CoursesPage: React.FC = () => {
                       className="flex items-center space-x-1"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span>{course.rating}</span>
-                    </motion.div>
-                    <motion.div 
-                      className="flex items-center space-x-1"
-                      whileHover={{ scale: 1.05 }}
-                    >
                       <Users className="h-4 w-4" />
-                      <span>{course.students}</span>
+                      <span>{course.enrolledStudents}</span>
                     </motion.div>
                     <motion.div 
                       className="flex items-center space-x-1"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <Clock className="h-4 w-4" />
-                      <span>{course.duration}</span>
+                      <BookOpen className="h-4 w-4" />
+                      <span>{course.materials.length} materials</span>
+                    </motion.div>
+                    <motion.div 
+                      className="flex items-center space-x-1"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                      <span>{course.quizzes.length} quizzes</span>
                     </motion.div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <div>
-                    {course.isFree ? (
-                      <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">Free</span>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-gray-900">₦{course.price.toLocaleString()}</span>
-                        {course.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">₦{course.originalPrice.toLocaleString()}</span>
-                        )}
-                      </div>
-                    )}
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">Free</span>
+                    <span className="text-sm text-gray-500">with registration</span>
                   </div>
                   
                   <motion.div
@@ -474,14 +323,10 @@ export const CoursesPage: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Link
-                      to={course.isEnrolled ? `/course/${course.id}` : '#'}
-                      className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl ${
-                        course.isEnrolled
-                          ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700'
-                          : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
-                      }`}
+                      to={`/course/${course.id}`}
+                      className="px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
                     >
-                      {course.isEnrolled ? 'Continue' : 'Enroll Now'}
+                      View Course
                     </Link>
                   </motion.div>
                 </div>
