@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Navbar } from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import { jambSubjects, subjectCategories, getSubjectsByCategory } from '../data/subjects';
 import { 
   BookOpen, 

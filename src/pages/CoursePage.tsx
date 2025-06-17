@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Navbar } from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import { Play, Download, BookOpen, Clock, CheckCircle, ArrowLeft, FileText, Video, Pizza as Quiz, Star, Users, Target } from 'lucide-react';
 
 export const CoursePage: React.FC = () => {

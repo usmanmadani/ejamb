@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Navbar } from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import { getSubjectNames } from '../data/subjects';
 import { 
   ArrowLeft, 

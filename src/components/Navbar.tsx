@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { User, LogOut, Bell, BookOpen } from 'lucide-react';
 import { Logo } from './Logo';
 
-export const Navbar: React.FC = () => {
+const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -108,3 +108,5 @@ export const Navbar: React.FC = () => {
     </motion.nav>
   );
 };
+
+export default Navbar;
