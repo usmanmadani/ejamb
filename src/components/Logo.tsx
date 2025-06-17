@@ -13,7 +13,7 @@ export const Logo: React.FC<LogoProps> = ({
 }) => {
   return (
     <img
-      src="/3.png"
+      src="/3-removebg-preview copy.png"
       alt="eJAMB Logo"
       width={width}
       height={height}
