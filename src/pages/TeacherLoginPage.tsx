@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { GraduationCap, Mail, Lock, Eye, EyeOff, BookOpen } from 'lucide-react';
+import { Logo } from '../components/Logo';
+import { Mail, Lock, Eye, EyeOff, BookOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const TeacherLoginPage: React.FC = () => {
@@ -38,7 +39,7 @@ export const TeacherLoginPage: React.FC = () => {
       >
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2">
-            <GraduationCap className="h-12 w-12 text-blue-600" />
+            <Logo className="h-12 w-12" />
             <span className="text-2xl font-bold text-gray-900">eJAMB</span>
           </Link>
           <div className="mt-4 flex items-center justify-center space-x-2">
