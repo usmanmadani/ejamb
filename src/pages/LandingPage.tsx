@@ -72,13 +72,31 @@ const slideInRight = {
   }
 };
 
+const floatingAnimation = {
+  y: [0, -20, 0],
+  transition: {
+    duration: 3,
+    repeat: Infinity,
+    ease: "easeInOut"
+  }
+};
+
+const pulseAnimation = {
+  scale: [1, 1.05, 1],
+  transition: {
+    duration: 2,
+    repeat: Infinity,
+    ease: "easeInOut"
+  }
+};
+
 // Animated background component
 const AnimatedBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50">
         {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 bg-emerald-400 rounded-full opacity-20"
@@ -86,6 +104,7 @@ const AnimatedBackground = () => {
               x: [0, 100, 0],
               y: [0, -100, 0],
               scale: [1, 1.5, 1],
+              rotate: [0, 180, 360],
             }}
             transition={{
               duration: 10 + i * 2,
@@ -105,6 +124,8 @@ const AnimatedBackground = () => {
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 180, 360],
+            x: [0, 50, 0],
+            y: [0, -30, 0],
           }}
           transition={{
             duration: 20,
@@ -117,11 +138,40 @@ const AnimatedBackground = () => {
           animate={{
             scale: [1.2, 1, 1.2],
             rotate: [360, 180, 0],
+            x: [0, -40, 0],
+            y: [0, 20, 0],
           }}
           transition={{
             duration: 25,
             repeat: Infinity,
             ease: "linear"
+          }}
+        />
+        
+        {/* Geometric shapes */}
+        <motion.div
+          className="absolute top-1/4 right-1/4 w-16 h-16 border-2 border-blue-300 opacity-20"
+          animate={{
+            rotate: [0, 360],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 left-1/3 w-12 h-12 bg-emerald-300 opacity-20 rounded-full"
+          animate={{
+            y: [0, -50, 0],
+            x: [0, 30, 0],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
           }}
         />
       </div>
@@ -235,19 +285,19 @@ export const LandingPage: React.FC = () => {
       name: "Adaora Okafor",
       score: "342",
       text: "eJAMB helped me score 342 in JAMB! The AI assistant was incredibly helpful for understanding difficult concepts.",
-      image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+      image: "https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
     },
     {
       name: "Chidi Nwankwo",
       score: "298",
       text: "The mock exams prepared me well. I knew exactly what to expect on the actual exam day.",
-      image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+      image: "https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
     },
     {
       name: "Funmi Adebayo",
       score: "315",
       text: "The teacher courses were amazing! Dr. Sarah's physics course made complex topics so easy to understand.",
-      image: "https://images.pexels.com/photos/1462630/pexels-photo-1462630.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+      image: "https://images.pexels.com/photos/5212703/pexels-photo-5212703.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
     }
   ];
 
@@ -271,7 +321,7 @@ export const LandingPage: React.FC = () => {
               <span className="text-xl font-bold text-gray-900">eJAMB</span>
             </motion.div>
             
-            <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-4">
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Link to="/courses" className="text-gray-600 hover:text-gray-900 transition-colors">
                   Courses
@@ -320,15 +370,26 @@ export const LandingPage: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <motion.button 
+                className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white px-4 py-2 rounded-lg text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Menu
+              </motion.button>
+            </div>
           </div>
         </div>
       </motion.header>
 
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden" ref={heroRef}>
+      <section className="relative py-12 md:py-20 overflow-hidden" ref={heroRef}>
         <AnimatedBackground />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <motion.div
               variants={slideInLeft}
               initial="hidden"
@@ -345,7 +406,7 @@ export const LandingPage: React.FC = () => {
               </motion.div>
               
               <motion.h1 
-                className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+                className="text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
@@ -354,7 +415,7 @@ export const LandingPage: React.FC = () => {
               </motion.h1>
               
               <motion.p 
-                className="text-xl text-gray-600 mb-8 leading-relaxed"
+                className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
@@ -374,7 +435,7 @@ export const LandingPage: React.FC = () => {
                 >
                   <Link 
                     to="/register"
-                    className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-emerald-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl"
+                    className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:from-emerald-700 hover:to-blue-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl"
                   >
                     Start Learning Today
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -387,7 +448,7 @@ export const LandingPage: React.FC = () => {
                 >
                   <Link
                     to="/courses"
-                    className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg"
+                    className="border-2 border-gray-300 text-gray-700 px-6 md:px-8 py-3 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg"
                   >
                     <Play className="mr-2 h-5 w-5" />
                     Browse Courses
@@ -396,7 +457,7 @@ export const LandingPage: React.FC = () => {
               </motion.div>
 
               <motion.div 
-                className="flex items-center space-x-6"
+                className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
@@ -406,7 +467,7 @@ export const LandingPage: React.FC = () => {
                     <motion.img
                       key={i}
                       className="h-10 w-10 rounded-full border-2 border-white shadow-md"
-                      src={`https://images.pexels.com/photos/${1239291 + i}/pexels-photo-${1239291 + i}.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop`}
+                      src={`https://images.pexels.com/photos/${5212317 + i}/pexels-photo-${5212317 + i}.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop&crop=face`}
                       alt=""
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -444,14 +505,15 @@ export const LandingPage: React.FC = () => {
                 className="relative"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                animate={floatingAnimation}
               >
                 <img
                   src="https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
-                  alt="Beautiful African students studying"
-                  className="rounded-2xl shadow-2xl"
+                  alt="African students studying together"
+                  className="rounded-2xl shadow-2xl w-full h-auto"
                 />
                 <motion.div 
-                  className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+                  className="absolute -bottom-4 md:-bottom-6 -left-4 md:-left-6 bg-white p-4 md:p-6 rounded-xl shadow-lg border border-gray-100"
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.6 }}
@@ -469,11 +531,12 @@ export const LandingPage: React.FC = () => {
                 </motion.div>
                 
                 <motion.div 
-                  className="absolute -top-4 -right-4 bg-blue-600 text-white p-3 rounded-xl shadow-lg"
+                  className="absolute -top-2 md:-top-4 -right-2 md:-right-4 bg-blue-600 text-white p-3 rounded-xl shadow-lg"
                   initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
                   animate={{ opacity: 1, scale: 1, rotate: 0 }}
                   transition={{ delay: 1.4, duration: 0.6 }}
                   whileHover={{ scale: 1.1, rotate: 5 }}
+                  animate={pulseAnimation}
                 >
                   <Zap className="h-6 w-6" />
                 </motion.div>
@@ -484,10 +547,10 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white" ref={statsRef}>
+      <section className="py-12 md:py-16 bg-white" ref={statsRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="grid grid-cols-2 lg:grid-cols-5 gap-8"
+            className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8"
             variants={staggerContainer}
             initial="hidden"
             animate={statsInView ? "visible" : "hidden"}
@@ -501,14 +564,14 @@ export const LandingPage: React.FC = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <motion.div 
-                  className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-2"
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-2"
                   initial={{ scale: 0 }}
                   animate={statsInView ? { scale: 1 } : { scale: 0 }}
                   transition={{ delay: index * 0.1 + 0.5, duration: 0.6, type: "spring" }}
                 >
                   {stat.number}
                 </motion.div>
-                <div className="text-gray-600 group-hover:text-gray-800 transition-colors">{stat.label}</div>
+                <div className="text-sm md:text-base text-gray-600 group-hover:text-gray-800 transition-colors">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -516,7 +579,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Empower Your JAMB Journey Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" ref={interactiveRef}>
+      <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" ref={interactiveRef}>
         <div className="absolute inset-0">
           <motion.div
             className="absolute top-10 left-10 w-32 h-32 bg-emerald-400 rounded-full opacity-10 blur-xl"
@@ -548,13 +611,13 @@ export const LandingPage: React.FC = () => {
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             variants={fadeInUp}
             initial="hidden"
             animate={interactiveInView ? "visible" : "hidden"}
           >
             <motion.h2 
-              className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6"
+              className="text-2xl md:text-3xl lg:text-5xl font-bold text-gray-900 mb-6"
               initial={{ opacity: 0, y: 30 }}
               animate={interactiveInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -562,7 +625,7 @@ export const LandingPage: React.FC = () => {
               Empower Your <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">JAMB Journey</span> with E-Jamb
             </motion.h2>
             <motion.p 
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
+              className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={interactiveInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -572,7 +635,7 @@ export const LandingPage: React.FC = () => {
           </motion.div>
 
           <motion.div 
-            className="grid lg:grid-cols-3 md:grid-cols-2 gap-8"
+            className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 md:gap-8"
             variants={staggerContainer}
             initial="hidden"
             animate={interactiveInView ? "visible" : "hidden"}
@@ -580,7 +643,7 @@ export const LandingPage: React.FC = () => {
             {interactiveFeatures.map((feature, index) => (
               <motion.div
                 key={index}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group border border-white/20"
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 group border border-white/20"
                 variants={scaleIn}
                 whileHover={{ 
                   scale: 1.05, 
@@ -599,11 +662,11 @@ export const LandingPage: React.FC = () => {
                   {feature.icon}
                 </motion.div>
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-gray-800 transition-colors">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 group-hover:text-gray-800 transition-colors">
                   {feature.title}
                 </h3>
                 
-                <p className="text-gray-600 mb-6 leading-relaxed group-hover:text-gray-700 transition-colors">
+                <p className="text-gray-600 mb-6 leading-relaxed group-hover:text-gray-700 transition-colors text-sm md:text-base">
                   {feature.description}
                 </p>
                 
@@ -617,7 +680,7 @@ export const LandingPage: React.FC = () => {
                       feature.color.includes('gradient')
                         ? 'text-indigo-600 hover:text-indigo-700'
                         : `text-${feature.color}-600 hover:text-${feature.color}-700`
-                    } font-semibold transition-colors group`}
+                    } font-semibold transition-colors group text-sm md:text-base`}
                   >
                     Learn more
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -630,24 +693,24 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white" ref={featuresRef}>
+      <section className="py-12 md:py-20 bg-white" ref={featuresRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             variants={fadeInUp}
             initial="hidden"
             animate={featuresInView ? "visible" : "hidden"}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Everything You Need to Succeed
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
               Our comprehensive platform provides all the tools and resources you need to excel in your JAMB examination.
             </p>
           </motion.div>
 
           <motion.div 
-            className="grid lg:grid-cols-2 gap-8"
+            className="grid lg:grid-cols-2 gap-6 md:gap-8"
             variants={staggerContainer}
             initial="hidden"
             animate={featuresInView ? "visible" : "hidden"}
@@ -655,7 +718,7 @@ export const LandingPage: React.FC = () => {
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group"
+                className="bg-white p-6 md:p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group"
                 variants={fadeInUp}
                 whileHover={{ 
                   scale: 1.02, 
@@ -671,10 +734,10 @@ export const LandingPage: React.FC = () => {
                     {feature.icon}
                   </motion.div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 group-hover:text-gray-700 transition-colors">{feature.description}</p>
+                    <p className="text-gray-600 group-hover:text-gray-700 transition-colors text-sm md:text-base">{feature.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -684,9 +747,9 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Teacher Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-emerald-50 relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-blue-50 to-emerald-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -694,7 +757,7 @@ export const LandingPage: React.FC = () => {
               viewport={{ once: true }}
             >
               <motion.h2 
-                className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6"
+                className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -703,7 +766,7 @@ export const LandingPage: React.FC = () => {
                 Learn from Expert Teachers
               </motion.h2>
               <motion.p 
-                className="text-xl text-gray-600 mb-8"
+                className="text-lg md:text-xl text-gray-600 mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
@@ -730,12 +793,12 @@ export const LandingPage: React.FC = () => {
                     variants={fadeInUp}
                   >
                     <CheckCircle className="h-6 w-6 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
+                    <span className="text-gray-700 text-sm md:text-base">{item}</span>
                   </motion.li>
                 ))}
               </motion.ul>
               <motion.div 
-                className="flex space-x-4"
+                className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
@@ -747,7 +810,7 @@ export const LandingPage: React.FC = () => {
                 >
                   <Link
                     to="/courses"
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl text-center block"
                   >
                     Browse Courses
                   </Link>
@@ -758,7 +821,7 @@ export const LandingPage: React.FC = () => {
                 >
                   <Link
                     to="/teacher-register"
-                    className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
+                    className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors text-center block"
                   >
                     Become a Teacher
                   </Link>
@@ -774,10 +837,11 @@ export const LandingPage: React.FC = () => {
             >
               <motion.img
                 src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
-                alt="Beautiful African classroom with students"
-                className="rounded-2xl shadow-xl"
+                alt="African teacher with students in classroom"
+                className="rounded-2xl shadow-xl w-full h-auto"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                animate={floatingAnimation}
               />
             </motion.div>
           </div>
@@ -785,25 +849,25 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Success Stories from Our Students
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg md:text-xl text-gray-600">
               See how eJAMB has helped students achieve their dreams
             </p>
           </motion.div>
 
           <motion.div 
-            className="grid lg:grid-cols-3 gap-8"
+            className="grid lg:grid-cols-3 gap-6 md:gap-8"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -812,7 +876,7 @@ export const LandingPage: React.FC = () => {
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                className="bg-gray-50 p-8 rounded-xl group hover:bg-white hover:shadow-lg transition-all duration-300 border border-gray-100"
+                className="bg-gray-50 p-6 md:p-8 rounded-xl group hover:bg-white hover:shadow-lg transition-all duration-300 border border-gray-100"
                 variants={scaleIn}
                 whileHover={{ 
                   scale: 1.02, 
@@ -832,7 +896,7 @@ export const LandingPage: React.FC = () => {
                     <p className="text-sm text-emerald-600 font-medium">JAMB Score: {testimonial.score}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 italic group-hover:text-gray-700 transition-colors">"{testimonial.text}"</p>
+                <p className="text-gray-600 italic group-hover:text-gray-700 transition-colors text-sm md:text-base">"{testimonial.text}"</p>
               </motion.div>
             ))}
           </motion.div>
@@ -840,26 +904,26 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-20 bg-gradient-to-br from-emerald-50 to-blue-50">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-emerald-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               Simple, Affordable Pricing
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg md:text-xl text-gray-600">
               Get full access to all features for just ₦5,000
             </p>
           </motion.div>
 
           <div className="max-w-md mx-auto">
             <motion.div 
-              className="bg-white rounded-2xl shadow-lg p-8 border-2 border-emerald-600 relative overflow-hidden"
+              className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border-2 border-emerald-600 relative overflow-hidden"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
@@ -880,8 +944,8 @@ export const LandingPage: React.FC = () => {
               </motion.div>
               
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Full Access Pass</h3>
-                <div className="text-4xl font-bold text-emerald-600 mb-2">₦5,000</div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Full Access Pass</h3>
+                <div className="text-3xl md:text-4xl font-bold text-emerald-600 mb-2">₦5,000</div>
                 <p className="text-gray-600">One-time payment</p>
               </div>
 
@@ -908,7 +972,7 @@ export const LandingPage: React.FC = () => {
                     variants={fadeInUp}
                   >
                     <CheckCircle className="h-5 w-5 text-emerald-600 mr-3" />
-                    <span className="text-gray-700">{feature}</span>
+                    <span className="text-gray-700 text-sm md:text-base">{feature}</span>
                   </motion.li>
                 ))}
               </motion.ul>
@@ -948,14 +1012,14 @@ export const LandingPage: React.FC = () => {
                 <Logo className="h-8 w-8" />
                 <span className="text-xl font-bold">eJAMB</span>
               </div>
-              <p className="text-gray-400">
+              <p className="text-gray-400 text-sm md:text-base">
                 Empowering Nigerian students to achieve their JAMB goals through innovative learning technology.
               </p>
             </motion.div>
             
             <motion.div variants={fadeInUp}>
               <h4 className="font-semibold mb-4">For Students</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-gray-400 text-sm md:text-base">
                 <li><Link to="/courses" className="hover:text-white transition-colors">Browse Courses</Link></li>
                 <li><Link to="/syllabus" className="hover:text-white transition-colors">JAMB Syllabus</Link></li>
                 <li><Link to="/register" className="hover:text-white transition-colors">Sign Up</Link></li>
@@ -965,7 +1029,7 @@ export const LandingPage: React.FC = () => {
             
             <motion.div variants={fadeInUp}>
               <h4 className="font-semibold mb-4">For Teachers</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-gray-400 text-sm md:text-base">
                 <li><Link to="/teacher-register" className="hover:text-white transition-colors">Become a Teacher</Link></li>
                 <li><Link to="/teacher-login" className="hover:text-white transition-colors">Teacher Login</Link></li>
                 <li>Create Courses</li>
@@ -975,7 +1039,7 @@ export const LandingPage: React.FC = () => {
             
             <motion.div variants={fadeInUp}>
               <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-gray-400 text-sm md:text-base">
                 <li>Help Center</li>
                 <li>Contact Us</li>
                 <li>Community Forum</li>
