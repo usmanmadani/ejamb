@@ -178,11 +178,11 @@ export const LandingPage: React.FC = () => {
   ];
 
   const stats = [
-    { number: "50,000+", label: "Students Enrolled" },
+    { number: "50+", label: "Students Enrolled" },
     { number: "95%", label: "Success Rate" },
     { number: "10,000+", label: "Past Questions" },
-    { number: "200+", label: "Tutorial Videos" },
-    { number: "50+", label: "Expert Teachers" }
+    { number: "20+", label: "Tutorial Videos" },
+    { number: "20+", label: "Expert Teachers" }
   ];
 
   const interactiveFeatures = [
@@ -218,14 +218,14 @@ export const LandingPage: React.FC = () => {
       icon: <Users className="h-12 w-12" />,
       title: "Interactive Forums",
       description: "Empower learning through interactive forum discussions.",
-      color: "indigo",
+      color: "gradient-to-r from-indigo-500 to-purple-600",
       link: "/forum"
     },
     {
       icon: <Send className="h-12 w-12" />,
       title: "Easy Messaging",
       description: "Start conversations effortlessly with instant messaging.",
-      color: "pink",
+      color: "gradient-to-r from-pink-500 to-rose-600",
       link: "/ai-assistant"
     }
   ];
@@ -275,6 +275,11 @@ export const LandingPage: React.FC = () => {
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Link to="/courses" className="text-gray-600 hover:text-gray-900 transition-colors">
                   Courses
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link to="/syllabus" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  Syllabus
                 </Link>
               </motion.div>
               <div className="relative group">
@@ -423,7 +428,7 @@ export const LandingPage: React.FC = () => {
                       </motion.div>
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600">Trusted by 50,000+ students</p>
+                  <p className="text-sm text-gray-600">Trusted by 50+ students</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -442,7 +447,7 @@ export const LandingPage: React.FC = () => {
               >
                 <img
                   src="https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
-                  alt="Students studying"
+                  alt="Beautiful African students studying"
                   className="rounded-2xl shadow-2xl"
                 />
                 <motion.div 
@@ -584,7 +589,11 @@ export const LandingPage: React.FC = () => {
                 }}
               >
                 <motion.div 
-                  className={`inline-flex p-4 rounded-2xl bg-gradient-to-r from-${feature.color}-400 to-${feature.color}-600 text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                  className={`inline-flex p-4 rounded-2xl ${
+                    feature.color.includes('gradient') 
+                      ? `bg-${feature.color}` 
+                      : `bg-gradient-to-r from-${feature.color}-400 to-${feature.color}-600`
+                  } text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
                   whileHover={{ rotate: 5 }}
                 >
                   {feature.icon}
@@ -604,7 +613,11 @@ export const LandingPage: React.FC = () => {
                 >
                   <Link
                     to={feature.link}
-                    className={`inline-flex items-center text-${feature.color}-600 hover:text-${feature.color}-700 font-semibold transition-colors group`}
+                    className={`inline-flex items-center ${
+                      feature.color.includes('gradient')
+                        ? 'text-indigo-600 hover:text-indigo-700'
+                        : `text-${feature.color}-600 hover:text-${feature.color}-700`
+                    } font-semibold transition-colors group`}
                   >
                     Learn more
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -761,7 +774,7 @@ export const LandingPage: React.FC = () => {
             >
               <motion.img
                 src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
-                alt="Teacher teaching"
+                alt="Beautiful African classroom with students"
                 className="rounded-2xl shadow-xl"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -944,9 +957,9 @@ export const LandingPage: React.FC = () => {
               <h4 className="font-semibold mb-4">For Students</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link to="/courses" className="hover:text-white transition-colors">Browse Courses</Link></li>
+                <li><Link to="/syllabus" className="hover:text-white transition-colors">JAMB Syllabus</Link></li>
                 <li><Link to="/register" className="hover:text-white transition-colors">Sign Up</Link></li>
                 <li><Link to="/login" className="hover:text-white transition-colors">Student Login</Link></li>
-                <li>AI Assistant</li>
               </ul>
             </motion.div>
             
