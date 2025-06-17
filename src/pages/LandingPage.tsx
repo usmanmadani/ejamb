@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Logo } from '../components/Logo';
 import { 
-  GraduationCap, 
   BookOpen, 
   Brain, 
   Users, 
@@ -267,7 +267,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <GraduationCap className="h-8 w-8 text-emerald-600" />
+              <Logo className="h-8 w-8" />
               <span className="text-xl font-bold text-gray-900">eJAMB</span>
             </motion.div>
             
@@ -932,7 +932,7 @@ export const LandingPage: React.FC = () => {
           >
             <motion.div variants={fadeInUp}>
               <div className="flex items-center space-x-2 mb-4">
-                <GraduationCap className="h-8 w-8 text-emerald-600" />
+                <Logo className="h-8 w-8" />
                 <span className="text-xl font-bold">eJAMB</span>
               </div>
               <p className="text-gray-400">

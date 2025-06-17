@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { GraduationCap, User, LogOut, Bell, BookOpen } from 'lucide-react';
+import { User, LogOut, Bell, BookOpen } from 'lucide-react';
+import { Logo } from './Logo';
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -32,7 +33,7 @@ export const Navbar: React.FC = () => {
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.6 }}
               >
-                <GraduationCap className="h-8 w-8 text-emerald-600" />
+                <Logo className="h-8 w-8" />
               </motion.div>
               <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 eJAMB
