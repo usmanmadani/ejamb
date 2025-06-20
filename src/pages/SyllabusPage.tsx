@@ -20,6 +20,8 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 // Animation variants
 const fadeInUp = {
@@ -78,6 +80,7 @@ export const SyllabusPage: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [expandedTopics, setExpandedTopics] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   const subjects: Subject[] = [
     {
@@ -482,6 +485,11 @@ export const SyllabusPage: React.FC = () => {
     );
   };
 
+  const handleDownload = (subject: Subject) => {
+    toast.success(`Downloading ${subject.name} syllabus PDF...`);
+    // Simulate download, or implement real download logic here
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <Navbar />
@@ -688,6 +696,10 @@ export const SyllabusPage: React.FC = () => {
                       className="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-colors"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setSelectedSubject(subject);
+                        setShowModal(true);
+                      }}
                     >
                       <Eye className="h-4 w-4" />
                     </motion.button>
@@ -695,6 +707,7 @@ export const SyllabusPage: React.FC = () => {
                       className="text-emerald-600 hover:text-emerald-700 p-2 rounded-lg hover:bg-emerald-50 transition-colors"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => handleDownload(subject)}
                     >
                       <Download className="h-4 w-4" />
                     </motion.button>
@@ -863,11 +876,17 @@ export const SyllabusPage: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t border-gray-200">
-                <button className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
+                <button
+                  className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                  onClick={() => toast.success(`Downloading ${selectedSubject.name} syllabus PDF...`)}
+                >
                   <Download className="h-4 w-4 md:h-5 md:w-5" />
                   <span className="text-sm md:text-base">Download PDF</span>
                 </button>
-                <button className="flex-1 bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center space-x-2">
+                <button
+                  className="flex-1 bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center space-x-2"
+                  onClick={() => navigate('/courses')}
+                >
                   <BookOpen className="h-4 w-4 md:h-5 md:w-5" />
                   <span className="text-sm md:text-base">Start Learning</span>
                 </button>

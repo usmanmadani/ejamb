@@ -285,19 +285,19 @@ export const LandingPage: React.FC = () => {
       name: "Adaora Okafor",
       score: "342",
       text: "eJAMB helped me score 342 in JAMB! The AI assistant was incredibly helpful for understanding difficult concepts.",
-      image: "https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=150&h=150&facepad=2"
     },
     {
       name: "Chidi Nwankwo",
       score: "298",
       text: "The mock exams prepared me well. I knew exactly what to expect on the actual exam day.",
-      image: "https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
+      image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=150&h=150&facepad=2"
     },
     {
       name: "Funmi Adebayo",
       score: "315",
       text: "The teacher courses were amazing! Dr. Sarah's physics course made complex topics so easy to understand.",
-      image: "https://images.pexels.com/photos/5212703/pexels-photo-5212703.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop&crop=face"
+      image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=150&h=150&facepad=2"
     }
   ];
 
@@ -469,8 +469,13 @@ export const LandingPage: React.FC = () => {
                     <motion.img
                       key={i}
                       className="h-10 w-10 rounded-full border-2 border-white shadow-md"
-                      src={`https://images.pexels.com/photos/${5212317 + i}/pexels-photo-${5212317 + i}.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&fit=crop&crop=face`}
-                      alt=""
+                      src={[
+                        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=facearea&w=40&h=40&facepad=2"
+                      ][i-1]}
+                      alt="African school student"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
@@ -510,7 +515,7 @@ export const LandingPage: React.FC = () => {
                 animate={floatingAnimation}
               >
                 <img
-                  src="https://images.pexels.com/photos/5212703/pexels-photo-5212703.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
+                  src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80"
                   alt="African students studying together with technology"
                   className="rounded-2xl shadow-2xl w-full h-auto"
                 />
@@ -838,7 +843,7 @@ export const LandingPage: React.FC = () => {
               style={{ y: y2 }}
             >
               <motion.img
-                src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop"
+                src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80"
                 alt="African teacher with students in classroom"
                 className="rounded-2xl shadow-xl w-full h-auto"
                 whileHover={{ scale: 1.02 }}
