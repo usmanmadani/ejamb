@@ -285,19 +285,19 @@ export const LandingPage: React.FC = () => {
       name: "Adaora Okafor",
       score: "342",
       text: "eJAMB helped me score 342 in JAMB! The AI assistant was incredibly helpful for understanding difficult concepts.",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=150&h=150&facepad=2"
+      image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=facearea&w=150&h=150&facepad=2"
     },
     {
       name: "Chidi Nwankwo",
       score: "298",
       text: "The mock exams prepared me well. I knew exactly what to expect on the actual exam day.",
-      image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=150&h=150&facepad=2"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=facearea&w=150&h=150&facepad=2"
     },
     {
       name: "Funmi Adebayo",
       score: "315",
       text: "The teacher courses were amazing! Dr. Sarah's physics course made complex topics so easy to understand.",
-      image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=150&h=150&facepad=2"
+      image: "https://images.unsplash.com/photo-1494790108755-2616c9c0e8e0?auto=format&fit=facearea&w=150&h=150&facepad=2"
     }
   ];
 
@@ -470,12 +470,12 @@ export const LandingPage: React.FC = () => {
                       key={i}
                       className="h-10 w-10 rounded-full border-2 border-white shadow-md"
                       src={[
-                        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=40&h=40&facepad=2",
-                        "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=40&h=40&facepad=2",
-                        "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=40&h=40&facepad=2",
-                        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=facearea&w=40&h=40&facepad=2"
+                        "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1494790108755-2616c9c0e8e0?auto=format&fit=facearea&w=40&h=40&facepad=2",
+                        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&w=40&h=40&facepad=2"
                       ][i-1]}
-                      alt="African school student"
+                      alt="Nigerian school student"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
@@ -515,8 +515,8 @@ export const LandingPage: React.FC = () => {
                 animate={floatingAnimation}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80"
-                  alt="African students studying together with technology"
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80"
+                  alt="Nigerian students studying together with technology"
                   className="rounded-2xl shadow-2xl w-full h-auto"
                 />
                 <motion.div 
@@ -843,8 +843,8 @@ export const LandingPage: React.FC = () => {
               style={{ y: y2 }}
             >
               <motion.img
-                src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80"
-                alt="African teacher with students in classroom"
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80"
+                alt="Nigerian teacher with students in classroom"
                 className="rounded-2xl shadow-xl w-full h-auto"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
